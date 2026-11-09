@@ -1,0 +1,51 @@
+schema: spec-driven
+
+# Project context (optional)
+# Add only constraints that should guide OpenSpec artifacts and workflows.
+# Include constraints an agent cannot infer by reading the code.
+# Keep general project documentation and discoverable codebase facts out.
+# Example:
+#   context: |
+#     Designs and tasks must cover Windows, macOS, and Linux
+#     Write all artifacts in Spanish
+
+# Per-artifact rules (optional)
+# Add custom rules for specific artifacts.
+# Example:
+#   rules:
+#     proposal:
+#       - Keep proposals under 500 words
+#       - Always state what is out of scope
+#     tasks:
+#       - Break tasks into chunks of max 2 hours
+
+# Per-operation guidance (optional)
+# Add advisory guidance for how apply and archive work should be conducted.
+# This is separate from artifact rules above.
+# Example:
+#   operations:
+#     apply:
+#       guidance:
+#         - Keep test summaries concise
+#     archive:
+#       guidance:
+#         - Summarize the archive outcome before finishing
+
+context: |
+  Part of the Kafka Demo system: kafka-demo-customer, kafka-demo-email, kafka-demo-analytics, kafka-demo-ui.
+  The UI only talks to services through /api/* paths proxied by Vite (dev) and nginx (container);
+  a change that needs a new endpoint must name the owning service repo.
+  Claude never commits; tasks end with changes left in the working tree for developer review.
+
+rules:
+  tasks:
+    - Include a task to add or update component tests for every behaviour change
+    - Include a task to update docs/ and README.md when behaviour or config changes
+
+# How /opsx:apply does its work. .claude/rules/development-workflow.md has the full workflow.
+operations:
+  apply:
+    guidance:
+      - For every task, invoke the superpowers:test-driven-development skill before writing code, and write the failing test first.
+      - Skip any commit step in that skill, and never delete existing code to satisfy it. Nothing is committed, so deleted work can't be recovered.
+      - When all tasks are complete, invoke the superpowers:requesting-code-review skill, following the code review section of .claude/rules/development-workflow.md.

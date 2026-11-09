@@ -1,0 +1,22 @@
+# Jib CLI build file: packages the Vite build (dist/) onto nginx.
+#   npm run container      (builds dist/ then runs `jib build`)
+# Requires the Jib CLI: https://github.com/GoogleContainerTools/jib/tree/master/jib-cli
+apiVersion: jib/v1alpha1
+kind: BuildFile
+
+from:
+  image: nginx:1.30-alpine
+
+exposedPorts:
+  - "8080"
+
+layers:
+  entries:
+    - name: nginx-config
+      files:
+        - src: docker/nginx.conf
+          dest: /etc/nginx/conf.d/default.conf
+    - name: static-site
+      files:
+        - src: dist
+          dest: /usr/share/nginx/html
