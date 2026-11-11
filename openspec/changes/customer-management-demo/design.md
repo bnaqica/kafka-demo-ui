@@ -16,7 +16,12 @@ See proposal.md for motivation. The UI is React 19 with Vite, with no router and
 
 ### Login through `keycloak-js`
 
-The login page is ours; its button redirects to the realm's hosted login. `keycloak-js` handles PKCE, the code exchange and refresh. It starts with `check-sso` and a `silent-check-sso.html` page, so a reload keeps the user signed in without storing the token. Alternative considered: a custom form with the password grant, rejected because it handles passwords in the app and the client has that grant disabled.
+Opening the app goes straight to the realm's hosted sign-in page; the app only shows a page of its own when Keycloak
+can't be reached. `keycloak-js` handles PKCE, the code exchange and refresh. It starts with `login-required`, so a reload
+with a live Keycloak session comes straight back without asking again, and the token is never stored. The sign-in page
+uses a `kafka-demo` login theme in `local-docker` that extends Keycloak's own theme with the app's colours. Alternative
+considered: a custom form with the password grant, rejected because it handles passwords in the app and the client has
+that grant disabled.
 
 The Keycloak URL comes from `VITE_KEYCLOAK_URL`, defaulting to `http://localhost:8180`. A new `src/auth` module exposes the session, the roles from `realm_access.roles`, and a `getToken()` that refreshes when under 30 seconds remain.
 

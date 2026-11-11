@@ -1,7 +1,7 @@
 # kafka-demo-ui
 
-React UI for the Kafka Demo system: create a customer, then watch the email and analytics services react
-to the Kafka events.
+React UI for the Kafka Demo system: sign in through Keycloak, manage customers, then watch the email and analytics
+services react to the Kafka events.
 
 Part of the Kafka Demo system — see [docs/architecture.md](docs/architecture.md).
 
@@ -17,7 +17,7 @@ Part of the Kafka Demo system — see [docs/architecture.md](docs/architecture.m
 - Node 22.12 or newer (`nvm use` reads `.nvmrc`)
 - For the feature workflow in Claude Code: OpenSpec (`npm install -g @fission-ai/openspec@latest`)
 - The three services running locally (`./gradlew bootRun` in each), which in turn need the
-  [local-docker](../../local-docker) stacks
+  [local-docker](../../local-docker) stacks, including Keycloak
 
 ## Run locally
 
@@ -26,7 +26,9 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:5173. The dev server proxies the API to the services:
+Open http://localhost:5173, which goes straight to the Keycloak sign-in page, and sign in as `kafkaDemoAdmin` (can add, edit and delete customers and open the Emails tab) or
+`kafkaDemoViewer` (read-only). The password for both is `local`. The Keycloak URL comes from `VITE_KEYCLOAK_URL` at build
+time and defaults to `http://localhost:8180`. The dev server proxies the API to the services:
 
 | Path | Service |
 |---|---|
@@ -34,7 +36,7 @@ Open http://localhost:5173. The dev server proxies the API to the services:
 | `/api/emails` | kafka-demo-email `localhost:8082` |
 | `/api/analytics` | kafka-demo-analytics `localhost:8083` |
 
-Lists poll every 3 seconds, because email and analytics update asynchronously after a customer is created.
+Lists poll every 3 seconds, because email and analytics update asynchronously after a customer changes.
 
 ## Scripts
 
@@ -57,7 +59,7 @@ npm run container                                  # -> docker image kafka-demo-
 docker run --rm -p 8080:8080 kafka-demo-ui:latest  # http://localhost:8080
 ```
 
-In the container, nginx proxies `/api/*` to `host.docker.internal:8081-8083`, i.e. services running on
+The Keycloak URL is fixed when the image is built. In the container, nginx proxies `/api/*` to `host.docker.internal:8081-8083`, i.e. services running on
 your machine. Edit `docker/nginx.conf` for other environments.
 
 ## Documentation

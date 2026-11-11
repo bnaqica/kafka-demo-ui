@@ -6,13 +6,13 @@ Shows signed-in users how many events the analytics service has saved, broken do
 
 ## ADDED Requirements
 
-### Requirement: Summary panel
-Signed-in users of either role SHALL see the total events and the count for each event type, refreshed periodically.
+### Requirement: Analytics tab
+Signed-in users of either role SHALL have an Analytics tab showing the total events and the count for each event type, refreshed periodically while the tab is open.
 
 #### Scenario: Viewer sees counts
-- **WHEN** a `customer-viewer` opens the app
-- **THEN** the panel shows the totals by event type
+- **WHEN** a `customer-viewer` opens the Analytics tab
+- **THEN** it shows the totals by event type
 
 #### Scenario: Analytics unavailable
 - **WHEN** the analytics service returns an error
-- **THEN** the panel shows the error and the rest of the app keeps working
+- **THEN** the tab shows the error and the other tabs keep working

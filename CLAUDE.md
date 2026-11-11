@@ -36,6 +36,7 @@ src/
   index.css             global styles and color tokens (light + dark)
   usePolling.js         load + poll hook
   api/client.js         fetch wrappers for every service endpoint
+  auth/session.js       Keycloak sign-in; tokens are kept in memory only
   components/           UI components, each with a colocated *.test.jsx
   test/setup.js         Vitest/Testing Library setup
 ```
@@ -47,6 +48,7 @@ src/
 - Use relative `/api/...` paths. A new service path needs entries in both `vite.config.js` and `docker/nginx.conf`.
 - Colors come from CSS custom properties in `index.css`; add tokens for both light and dark.
 - Tests: Testing Library, query by role/label (what users see), mock `api/client.js` rather than `fetch`.
+- Hiding a control by role is for convenience only; the services enforce every role.
 - Accessible by default: labels on inputs, `role="alert"` for errors, `role="status"` for confirmations.
 
 ## Workflow

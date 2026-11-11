@@ -1,43 +1,19 @@
-import { api } from './api/client.js';
-import { usePolling } from './usePolling.js';
-import CustomerForm from './components/CustomerForm.jsx';
-import CustomerList from './components/CustomerList.jsx';
-import EmailList from './components/EmailList.jsx';
-import AnalyticsPanel from './components/AnalyticsPanel.jsx';
+import { useEffect, useState } from 'react';
+import { initSession, onSessionEnded, signIn, signOut } from './auth/session.js';
+import Home from './components/Home.jsx';
+import LoginPage from './components/LoginPage.jsx';
 
 export default function App() {
-  const customers = usePolling(api.listCustomers);
-  const emails = usePolling(api.listEmails);
-  const summary = usePolling(api.analyticsSummary);
+  const [session, setSession] = useState({ status: 'loading' });
 
-  return (
-    <div className="app">
-      <header className="app-header">
-        <h1>Kafka Demo</h1>
-        <p>Create a customer, then watch the email and analytics services react to the Kafka events.</p>
-      </header>
+  useEffect(() => {
+    onSessionEnded(() => setSession({ status: 'signedOut' }));
+    initSession()
+      .then((user) => setSession(user ? { status: 'signedIn', user } : { status: 'signedOut' }))
+      .catch(() => setSession({ status: 'unavailable' }));
+  }, []);
 
-      <main className="grid">
-        <section className="card">
-          <h2>New customer</h2>
-          <CustomerForm onCreated={customers.refresh} />
-        </section>
-
-        <section className="card">
-          <h2>Analytics</h2>
-          <AnalyticsPanel summary={summary.data} error={summary.error} />
-        </section>
-
-        <section className="card">
-          <h2>Customers</h2>
-          <CustomerList customers={customers.data} error={customers.error} />
-        </section>
-
-        <section className="card">
-          <h2>Emails sent</h2>
-          <EmailList emails={emails.data} error={emails.error} />
-        </section>
-      </main>
-    </div>
-  );
+  if (session.status === 'loading') return <p className="muted">Loading…</p>;
+  if (session.status === 'signedIn') return <Home user={session.user} onSignOut={signOut} />;
+  return <LoginPage unavailable={session.status === 'unavailable'} onSignIn={signIn} />;
 }

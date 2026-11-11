@@ -6,12 +6,12 @@ The services now require Keycloak tokens and enforce roles, so the UI has no way
 
 ## What Changes
 
-- Add a login page that signs in through the `kafka-demo` Keycloak realm, plus sign out.
-- **BREAKING** Every service call sends the bearer token; the app shows nothing but the login page until signed in.
+- Make the `kafka-demo` Keycloak realm's sign-in page, in the app's colours, the landing page, plus sign out.
+- **BREAKING** Every service call sends the bearer token; the app shows nothing until signed in.
 - Show all customers with the full customer details. `customer-admin` can add, edit and delete; `customer-viewer` can only view.
 - Send an `Idempotency-Key` when adding a customer.
 - Add an Emails tab for `customer-admin` only: paged, newest first, filtered by last name and state.
-- Keep the analytics panel for both roles.
+- Move the analytics summary to its own tab, for both roles.
 
 ## Capabilities
 

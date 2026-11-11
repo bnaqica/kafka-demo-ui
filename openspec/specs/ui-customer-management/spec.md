@@ -7,11 +7,11 @@ Shows all customers to signed-in users and lets customer-admin users add, edit a
 ## Requirements
 
 ### Requirement: Customer list
-Signed-in users SHALL see all customers, newest first, with name, date of birth, gender, email, address and phones.
+Signed-in users SHALL see all customers, newest first, with name, email, city and state, and phones, and SHALL be able to open any customer to see every detail, including date of birth, gender and full address.
 
 #### Scenario: Viewer sees customers
-- **WHEN** a `customer-viewer` opens the app
-- **THEN** all customers are listed with their details
+- **WHEN** a `customer-viewer` opens the app and then a customer
+- **THEN** all customers are listed, and the opened one shows every detail
 
 ### Requirement: Viewer is read-only
 Users without `customer-admin` SHALL NOT see add, edit or delete controls.
